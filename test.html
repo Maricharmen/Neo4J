@@ -437,8 +437,7 @@ ORDER BY entities DESC LIMIT 10<!--/code--></pre>
 <div class="content">
 <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e:Entity)-[r]-(o:Officer)
 WHERE e.name CONTAINS "Appleby"
-RETURN *
-LIMIT 100<!--/code--></pre>
+RETURN * LIMIT 100<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -458,12 +457,9 @@ LIMIT 100<!--/code--></pre>
 <div class="content">
 <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o1:Officer)-[r1]->(e:Entity)<-[r2]-(o2:Officer)
 WHERE id(o1) < id(o2)
-WITH o1, o2, e,
-     COUNT { (o1)-->() } AS o1_relations,
-     COUNT { (o2)-->() } AS o2_relations
+WITH o1, o2, e, COUNT { (o1)-->() } AS o1_relations, COUNT { (o2)-->() } AS o2_relations
 WHERE o1_relations > 10 AND o2_relations > 10
-WITH o1, o2, COUNT(e) AS freq, collect(e)[0..10] AS entities
-WHERE freq > 10
+WITH o1, o2, COUNT(e) AS freq, collect(e)[0..10] AS entities WHERE freq > 10
 RETURN o1.name, o2.name, freq, [e IN entities | e.name]
 ORDER BY freq DESC LIMIT 10<!--/code--></pre>
 </div>
