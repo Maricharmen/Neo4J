@@ -50,7 +50,7 @@
 
 <slide class="row-fluid">
   <div class="col-sm-12">
-    <h3>First Slide: Media</h3>
+    <h3>Sobre la guía</h3>
     <br/>
     <div>
       <div class="imageblock" style="float: right;">
@@ -133,16 +133,63 @@ CREATE (i)-[:INTERMEDIARY_OF]->(e);<!--/code--></pre>
 
 
 
-   <h4>Querying Data</h4>
+   <h4>3</h4>
    <div class="paragraph">
-<p>We use a form field here:</p>
+<p>Nos informan sobre un nuevo beneficiario (un oficial) que ahora es parte de la empresa offshore, por lo que necesitamos agregarlo y asociarlo con la entidad.</p>
 </div>
-<input style="display:inline;width:30%;" value-for="name" class="form-control" value="Neo4j" size="40">
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (db:Database {name: $name})
-RETURN db<!--/code--></pre>
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE (o:Officer {
+  name: 'John Doe',
+  role: 'Beneficiary',
+  valid_until: '2025-12-31'
+})
+CREATE (o)-[:OFFICER_OF]->(e);<!--/code--></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Crea un nodo Officer con propiedades que definen el nombre y el rol del oficial (beneficiario) dentro de la entidad. Se establece una relación OFFICER_OF para vincular este oficial con la entidad.</p>
+</div>
+
+
+
+   <h4>4</h4>
+   <div class="paragraph">
+<p>Se nos proporciona la dirección registrada de la nueva empresa offshore, y debemos vincularla a la entidad.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE (a:Address {
+  address: '456 Ocean Ave, Hamilton, Bermuda',
+  valid_until: '2025-12-31'
+})
+CREATE (e)-[:REGISTERED_ADDRESS]->(a);<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Crea un nodo de tipo Address que representa la dirección registrada de la entidad offshore. Luego, establece una relación REGISTERED_ADDRESS entre la entidad (e) y la dirección (a), vinculando ambos nodos.</p>
+</div>
+
+
+
+   <h4>5</h4>
+   <div class="paragraph">
+<p>El cliente nos informa que otra entidad está vinculada a la empresa recién creada, y necesitamos establecer esta relación en la base de datos.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE (e2:Entity {
+  name: 'Investment Ventures LLC',
+  company_type: 'Offshore',
+  jurisdiction: 'Cayman Islands',
+  incorporation_date: '2010-08-15',
+  status: 'Active'
+})
+CREATE (e)-[:RELATED_ENTITY]->(e2);<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Crea una segunda entidad offshore (e2) y luego establece una relación RELATED_ENTITY entre las dos entidades (e y e2). Esto indica que ambas entidades están vinculadas en el contexto de la base de datos.</p>
 </div>
 	</div>
   </div>
@@ -152,26 +199,441 @@ RETURN db<!--/code--></pre>
 
 <slide class="row-fluid">
   <div class="col-sm-12">
-    <h3>Third Slide: Links</h3>
+    <h3>Eliminación</h3>
+    <br/>
+    <div>
+      
+
+
+   <h4>1</h4>
+   <div class="literalblock">
+<div class="content">
+<pre>El cliente nos informa que un oficial ya no tiene vínculo con la empresa y quiere eliminar la relación entre el oficial y la entidad.</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (i:Intermediary {name: 'Offshore Solutions Ltd.'})-[r:INTERMEDIARY_OF]->(e:Entity)
+DELETE r;<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Busca la relación INTERMEDIARY_OF entre el intermediario Offshore Solutions Ltd. y la entidad, eliminando solo la relación, no los nodos.</p>
+</div>
+
+
+
+   <h4>2</h4>
+   <div class="paragraph">
+<p>El cliente nos informa que un oficial ya no tiene vínculo con la empresa y quiere eliminar la relación entre el oficial y la entidad</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer {name: 'John Doe'})-[r:OFFICER_OF]->(e:Entity)
+DELETE r;<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Busca la relación OFFICER_OF entre el oficial John Doe y la entidad, y elimina solo esa relación</p>
+</div>
+
+
+
+   <h4>3</h4>
+   <div class="paragraph">
+<p>Se nos informa que la dirección registrada de la entidad ya no es válida o ha cambiado, por lo que debemos eliminar la relación con la dirección.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e:Entity {name: 'Global Holdings Ltd.'})-[r:REGISTERED_ADDRESS]->(a:Address)
+DELETE r;<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Busca y elimina la relación REGISTERED_ADDRESS entre la entidad Global Holdings Ltd. y la dirección asociada. El nodo de la dirección no es eliminado, solo la relación.</p>
+</div>
+
+
+
+   <h4>4</h4>
+   <div class="paragraph">
+<p>El cliente nos informa que dos entidades ya no están relacionadas y debemos eliminar su conexión.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e1:Entity {name: 'Global Holdings Ltd.'})-[r:RELATED_ENTITY]->(e2:Entity {name: 'Investment Ventures LLC'})
+DELETE r;<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Busca la relación RELATED_ENTITY entre las dos entidades y elimina solo esa relación, sin afectar los nodos de las entidades.</p>
+</div>
+
+
+
+   <h4>5</h4>
+   <div class="paragraph">
+<p>El cliente decide eliminar una entidad offshore que ya no está activa o ya no es relevante para sus registros.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e:Entity {name: 'Global Holdings Ltd.'})
+DELETE e;<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Esta consulta busca el nodo Entity con el nombre Global Holdings Ltd. y elimina dicho nodo de la base de datos.</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Actualización</h3>
+    <br/>
+    <div>
+      
+
+
+   <h4>1</h4>
+   <div class="paragraph">
+<p>El cliente nos pide que actualicemos el código de país de los oficiales de "USA" a "EU".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o: Officer)
+WHERE o.country_codes = "USA"
+SET o.country_codes = "EU";<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Esta consulta busca todos los nodos Officer cuyo código de país (country_codes) sea "USA" y actualiza esta propiedad a "EU"</p>
+</div>
+
+
+
+   <h4>2</h4>
+   <div class="paragraph">
+<p>El cliente nos pide que actualicemos las propiedades del nodo Officer con el nombre "Tillerson - Rex".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer {name: "Tillerson - Rex"})
+SET o.name = "Rex Tillerson", o.role = "Secretary of State", o.country = "USA"
+RETURN o<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Esta consulta busca el nodo Officer con el nombre "Tillerson - Rex" y actualiza sus propiedades. Cambia el name a "Rex Tillerson". Establece el role como "Secretary of State". Establece el country como "USA". Finalmente, devuelve el nodo actualizado.</p>
+</div>
+
+
+
+   <h4>3</h4>
+   <div class="paragraph">
+<p>El cliente nos pide que actualicemos las propiedades de los nodos Entity, Officer y la relación entre ellos para aquellas entidades cuyo nombre contiene "HSBC".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (n:Entity)-[r]-(o:Officer)
+WHERE n.name CONTAINS "HSBC"
+SET 
+  n.status = "Active",  
+  o.role = "Manager",   
+  r.since = 2020       
+RETURN n, o, r<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Esta consulta busca los nodos Entity cuyo nombre contiene "HSBC" y las relaciones con los nodos Officer conectados. Luego, establece el status de la entidad a "Active", el role del oficial a "Manager" y la propiedad since de la relación a 2020. Finalmente, devuelve los nodos y la relación actualizados.</p>
+</div>
+
+
+
+   <h4>4</h4>
+   <div class="paragraph">
+<p>El cliente nos pide que actualicemos la dirección registrada de las entidades cuyo nombre contiene "HSBC" y tienen una dirección en "Bermuda".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e:Entity)-[r:REGISTERED_ADDRESS]->(a:Address)
+WHERE e.name CONTAINS "HSBC" AND a.countries = "Bermuda"
+SET r.address = "UADY, Merida, Mexico", 
+RETURN e,a<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La consulta actualiza la propiedad address de la relación REGISTERED_ADDRESS entre la entidad Entity y la dirección Address, cambiando la dirección a "UADY, Merida, Mexico" para aquellas entidades cuyo nombre contiene "HSBC" y cuya dirección está en "Bermuda". Luego, devuelve los nodos Entity y Address actualizados.</p>
+</div>
+
+
+
+   <h4>5</h4>
+   <div class="paragraph">
+<p>El cliente nos pide que agreguemos la etiqueta Shareholder al nodo Officer con el nombre "Chapman - Wayne P".</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer {name: "Chapman - Wayne P"})
+SET o:Shareholder
+RETURN o<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Esta consulta busca el nodo Officer con el nombre "Chapman - Wayne P" y le agrega la etiqueta Shareholder. Luego, devuelve el nodo Officer actualizado.</p>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Selección</h3>
+    <br/>
+    <div>
+      
+
+
+   <h4>1</h4>
+   <div class="paragraph">
+<p>Determinar qué oficiales tienen roles o relaciones más extensas con entidades legales, lo que podría indicar influencia, control o actividad como intermediarios en estructuras offshore.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer)-[:CONNECTED_TO]->(:Entity)
+RETURN o.name, count(*) as entities
+ORDER BY entities DESC LIMIT 10<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La consulta:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Cuenta las conexiones entre nodos Officer y Entity.</p>
+</li>
+<li>
+<p>Ordena por número de conexiones (de mayor a menor).</p>
+</li>
+<li>
+<p>Limita los resultados a los 10 principales.</p>
+</li>
+</ul>
+</div>
+
+
+
+   <h4>2</h4>
+   <div class="paragraph">
+<p>Identificar las personas (oficiales) conectadas con la entidad "Appleby" y entender los roles o relaciones que tienen con esta entidad.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e:Entity)-[r]-(o:Officer)
+WHERE e.name CONTAINS "Appleby"
+RETURN *
+LIMIT 100<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La consulta:
+* Busca nodos etiquetados como Entity cuyo nombre contenga "Appleby" y encuentra las conexiones directas con nodos Officer.
+* Retorna los nodos y las relaciones involucradas para analizar las funciones desempeñadas y la red de contactos.
+* Se limita a mostrar solo los primeros 100 resultados.</p>
+</div>
+
+
+
+   <h4>3</h4>
+   <div class="paragraph">
+<p>Identificar las relaciones entre oficiales (Officer) en una red de entidades. El enfoque es encontrar aquellos oficiales que están conectados a un número significativo de entidades comunes, lo que puede indicar algún tipo de colaboración o influencia compartida entre ellos.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o1:Officer)-[r1]->(e:Entity)<-[r2]-(o2:Officer)
+WHERE id(o1) < id(o2)
+WITH o1, o2, e,
+     COUNT { (o1)-->() } AS o1_relations,
+     COUNT { (o2)-->() } AS o2_relations
+WHERE o1_relations > 10 AND o2_relations > 10
+WITH o1, o2, COUNT(e) AS freq, collect(e)[0..10] AS entities
+WHERE freq > 10
+RETURN o1.name, o2.name, freq, [e IN entities | e.name]
+ORDER BY freq DESC LIMIT 10<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La consulta:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Busca nodos o1 y o2 del tipo Officer que están conectados a la misma entidad e (nodo Entity) por relaciones.</p>
+</li>
+<li>
+<p>Cuenta cuántas relaciones salientes tienen o1 y o2. Solo se consideran si ambos tienen más de 10 relaciones salientes en total.</p>
+</li>
+<li>
+<p>Cuenta cuántas entidades (e) tienen en común o1 y o2.</p>
+</li>
+<li>
+<p>Solo incluye parejas de oficiales que comparten más de 10 entidades.</p>
+</li>
+<li>
+<p>Ordena las parejas por la cantidad de conexiones compartidas y devuelve las 10 más relevantes.
+Muestra los nombres de los oficiales, la cantidad de entidades compartidas, y hasta 10 de esas entidades.</p>
+</li>
+</ul>
+</div>
+
+
+
+   <h4>4</h4>
+   <div class="paragraph">
+<p>Jurisdicciones offshore más populares asociadas a funcionarios por país de residencia
+Identificar las jurisdicciones offshore más utilizadas por funcionarios vinculados a entidades con domicilio en países específicos, como los Estados Unidos.
+El análisis destaca que Bermudas y las Islas Caimán son las jurisdicciones offshore más comunes para entidades relacionadas con funcionarios con domicilio en EE.UU.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="https://example.com"><img src="https://github.com/Maricharmen/Neo4J_Paradise_Papers/blob/main/Screenshot%20From%202024-12-05%2014-10-38.png?raw=true" alt="Screenshot%20From%202024 12 05%2014 10 38" width="100"></a>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer)-->(e:Entity)<-[:CONNECTED_TO]-(i:Intermediary)
+WHERE o.country_codes CONTAINS 'USA'
+RETURN e.jurisdiction_description AS jurisdiction, count(*) AS number
+ORDER BY number DESC LIMIT 10<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La consulta:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Busca funcionarios (Officer) conectados con entidades (Entity) a través de intermediarios (Intermediary).</p>
+</li>
+<li>
+<p>Limita el análisis a funcionarios cuya dirección contiene "USA".</p>
+</li>
+<li>
+<p>Lista las jurisdicciones offshore y la cantidad de veces que aparecen en la red de relaciones, ordenadas de mayor a menor frecuencia, mostrando solo las 10 principales.</p>
+</li>
+</ul>
+</div>
+
+
+
+   <h4>5</h4>
+   <div class="paragraph">
+<p>Casa de Inversiones Queen Elizabeth
+Explorar la red de relaciones e inversiones vinculadas al Ducado de Lancaster, patrimonio privado de la Reina Isabel II, para identificar su conexión con entidades offshore como el Dover Street VI Cayman Fund.
+El análisis proporciona una visualización detallada de las conexiones del Ducado, confirmando su inversión en el Dover Street VI Cayman Fund, una entidad registrada en las Islas Caimán. Esta inversión, destacada en los Paradise Papers, subraya la participación de un patrimonio real en jurisdicciones offshore, previamente no comunicada públicamente.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<a class="image" href="https://example.com"><img src="https://github.com/Maricharmen/Neo4J_Paradise_Papers/blob/main/Screenshot%20From%202024-12-05%2014-12-28.png?raw=true" alt="Screenshot%20From%202024 12 05%2014 12 28" width="100"></a>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH p=(o:Officer {name: "The Duchy of Lancaster"})-[*..2]-()
+RETURN p<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La consulta:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Busca conexiones directas o indirectas (hasta dos saltos) entre el nodo Officer identificado como "The Duchy of Lancaster" y otros nodos en la base de datos.</p>
+</li>
+<li>
+<p>Devuelve el grafo completo que representa todas las relaciones de este nodo, incluidas sus inversiones, entidades intermediarias, y posibles vinculaciones offshore.</p>
+</li>
+</ul>
+</div>
+
+
+
+   <h4>6</h4>
+   <div class="paragraph">
+<p>Identificar  las conexiones directas e indirectas más cortas entre dos figuras públicas, Rex Tillerson y el Ducado de Lancaster</p>
+</div>
+<div class="paragraph">
+<p>Rex Tillerson, el Secretario de Estado de EE.UU. que tenía conexiones con una empresa de petróleo y gas con sede en Bermudas que operaba en Yemen, y la Reina de Inglaterra, cuyo patrimonio, según se informó, era un inversor en una empresa con sede en Bermudas.</p>
+</div>
+<div class="paragraph">
+<p>Camino más corto:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH p=shortestPath((rex:Officer)-[*]-(queen:Officer))
+WHERE rex.name = "Tillerson - Rex" AND queen.name = "The Duchy of Lancaster"
+RETURN p<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Esto nos muestra un único camino más corto que conecta a la Reina de Inglaterra y a Rex Tillerson. El camino pasa por varias entidades extraterritoriales y funcionarios con conexiones con estas entidades.</p>
+</div>
+<div class="paragraph">
+<p>Todos los caminos más cortos</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH p=allShortestPaths((rex:Officer)-[*]-(queen:Officer))
+WHERE rex.name = "Tillerson - Rex" AND queen.name = "The Duchy of Lancaster"
+RETURN p<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Se puede revelar que estas personas son gestores de servicios corporativos: personas a las que se paga para que actúen como directores de entidades offshore y se encarguen de la administración de estas entidades.</p>
+</div>
+<div class="paragraph">
+<p>La consulta:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Examina conexiones arbitrarias entre los dos nodos, considerando cualquier número de saltos o tipos de relaciones.</p>
+</li>
+<li>
+<p>Devuelve las rutas que conectan a ambos con el menor número de nodos intermedios.</p>
+</li>
+</ul>
+</div>
+	</div>
+  </div>
+</slide>
+
+
+
+<slide class="row-fluid">
+  <div class="col-sm-12">
+    <h3>Recursos</h3>
     <br/>
     <div>
       <div class="ulist">
 <ul>
 <li>
-<p><a href="https://neo4j.com/developer/cypher">Learn more about Cypher</a></p>
+<p><a href="https://github.com/Maricharmen/Neo4J_Paradise_Papers">Repositorio del proyecto</a></p>
 </li>
 <li>
-<p><a help-topic='keys'>Help Keys</a></p>
+<p><a href="https://github.com/neo4j-graph-examples/icij-paradise-papers/tree/main/data">Dataset</a></p>
 </li>
 <li>
-<p><a play-topic='https://guides.neo4j.com/'>Another Guide</a></p>
+<p><a href="https://neo4j.com/">Sobre Neo4j</a></p>
 </li>
 </ul>
-</div>
-<div class="imageblock">
-<div class="content">
-<a class="image" href="https://example.com"><img src="https://avatars3.githubusercontent.com/u/201120" alt="201120" width="100"></a>
-</div>
 </div>
 	</div>
   </div>
