@@ -305,8 +305,8 @@ DELETE e;<!--/code--></pre>
 <div class="listingblock">
 <div class="content">
 <pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o: Officer)
-WHERE o.country_codes = "USA"
-SET o.country_codes = "EU";<!--/code--></pre>
+WHERE o.country_codes = "USA"
+SET o.country_codes = "EU";<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -321,9 +321,9 @@ SET o.country_codes = "EU";<!--/code--></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer {name: "Tillerson - Rex"})
-SET o.name = "Rex Tillerson", o.role = "Secretary of State", o.country = "USA"
-RETURN o<!--/code--></pre>
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer {name: "Tillerson - Rex"})
+SET o.name = "Rex Tillerson", o.role = "Secretary of State", o.country = "USA"
+RETURN o<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -338,13 +338,13 @@ RETURN o<!--/code--></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (n:Entity)-[r]-(o:Officer)
-WHERE n.name CONTAINS "HSBC"
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (n:Entity)-[r]-(o:Officer)
+WHERE n.name CONTAINS "HSBC"
 SET 
-  n.status = "Active",  
-  o.role = "Manager",   
-  r.since = 2020       
-RETURN n, o, r<!--/code--></pre>
+  n.status = "Active",  
+  o.role = "Manager",   
+  r.since = 2020       
+RETURN n, o, r<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -359,10 +359,10 @@ RETURN n, o, r<!--/code--></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e:Entity)-[r:REGISTERED_ADDRESS]->(a:Address)
-WHERE e.name CONTAINS "HSBC" AND a.countries = "Bermuda"
-SET r.address = "UADY, Merida, Mexico", 
-RETURN e,a<!--/code--></pre>
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e:Entity)-[r:REGISTERED_ADDRESS]->(a:Address)
+WHERE e.name CONTAINS "HSBC" AND a.countries = "Bermuda"
+SET r.address = "UADY, Merida, Mexico", 
+RETURN e,a<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -377,9 +377,9 @@ RETURN e,a<!--/code--></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer {name: "Chapman - Wayne P"})
-SET o:Shareholder
-RETURN o<!--/code--></pre>
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer {name: "Chapman - Wayne P"})
+SET o:Shareholder
+RETURN o<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -435,9 +435,9 @@ ORDER BY entities DESC LIMIT 10<!--/code--></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e:Entity)-[r]-(o:Officer)
-WHERE e.name CONTAINS "Appleby"
-RETURN * LIMIT 100<!--/code--></pre>
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (e:Entity)-[r]-(o:Officer)
+WHERE e.name CONTAINS "Appleby"
+RETURN * LIMIT 100<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -503,10 +503,10 @@ El análisis destaca que Bermudas y las Islas Caimán son las jurisdicciones off
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer)-->(e:Entity)<-[:CONNECTED_TO]-(i:Intermediary)
-WHERE o.country_codes CONTAINS 'USA'
-RETURN e.jurisdiction_description AS jurisdiction, count(*) AS number
-ORDER BY number DESC LIMIT 10<!--/code--></pre>
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->MATCH (o:Officer)-->(e:Entity)<-[:CONNECTED_TO]-(i:Intermediary)
+WHERE o.country_codes CONTAINS 'USA'
+RETURN e.jurisdiction_description AS jurisdiction, count(*) AS number
+ORDER BY number DESC LIMIT 10<!--/code--></pre>
 </div>
 </div>
 <div class="paragraph">
