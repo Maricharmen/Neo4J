@@ -25,7 +25,7 @@
   <carousel class="deck container-fluid">
     <!--slide class="row-fluid">
       <div class="col-sm-3">
-        <h3>A Test Guide</h3>
+        <h3>Manual Técnico</h3>
         <p class="lead">Information</p>
 			<!dl>
 				
@@ -44,7 +44,7 @@
     
 
 
-   <h4>A Test Guide</h4>
+   <h4>Manual Técnico</h4>
    
 
 
@@ -55,17 +55,28 @@
     <div>
       <div class="imageblock" style="float: right;">
 <div class="content">
-<img src="https://avatars3.githubusercontent.com/u/201120" alt="201120" width="200">
+<img src="https://ijnet.org/sites/default/files/styles/share_2_1/public/migrated/2017/11/4000px-ParadisePapers-%28hed%2C-logo%29.jpg?h=535727d3&itok=MKW3B4BS" alt="4000px ParadisePapers %28hed%2C logo%29" width="200">
 </div>
 </div>
 <div class="paragraph">
-<p>This is just a test guide.</p>
+<p>Esta es una guía sobre el dataset presentado acerca de los Paradise Papers. A continuación, se presentan algunas consultas de ejemplo que implementan operaciones CRUD, sobre la base de datos.</p>
 </div>
-<div class="paragraph">
-<p>But it comes with a picture and a video:</p>
-</div>
-<div class="responsive-embed">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/V7f2tGsNSck?showinfo=0&controls=2&autohide=1" frameborder="0" allowfullscreen></iframe>
+
+
+
+   <h4>Integrantes</h4>
+   <div class="ulist">
+<ul>
+<li>
+<p>Basto Martin Manuel Yahir</p>
+</li>
+<li>
+<p>Buenfil Perez Maricarmen</p>
+</li>
+<li>
+<p>Rodríguez Alfaro Sergio Daniel</p>
+</li>
+</ul>
 </div>
 	</div>
   </div>
@@ -75,21 +86,49 @@
 
 <slide class="row-fluid">
   <div class="col-sm-12">
-    <h3>Second Slide: Statements</h3>
+    <h3>Inserción</h3>
     <br/>
     <div>
       
 
 
-   <h4>Creating Data</h4>
+   <h4>1</h4>
    <div class="paragraph">
-<p>The area below becomes a clickable statement.</p>
+<p>El cliente nos informa sobre la creación de una nueva empresa offshore que se registró en Bermuda con un tipo de compañía offshore y una fecha de incorporación específica.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="shell" lang="shell"><!--code class="shell language-shell"-->CREATE (db:Database {name:"Neo4j"})
-RETURN db<!--/code--></pre>
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"--> CREATE (e:Entity {
+  name: 'Global Holdings Ltd.',
+  company_type: 'Offshore',
+  jurisdiction: 'Bermuda',
+  incorporation_date: '2005-06-01',
+  status: 'Active'
+});<!--/code--></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Esta consulta crea un nodo de tipo Entity con propiedades como el nombre de la entidad, tipo de empresa, jurisdicción, fecha de incorporación y estado. Esto representa una entidad offshore en la base de datos.</p>
+</div>
+
+
+
+   <h4>2</h4>
+   <div class="paragraph">
+<p>El cliente nos informa que una firma intermediaria facilitó la creación de la empresa, así que debemos asociarla a la entidad recién creada.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre mode="cypher"  class="highlight pre-scrollable programlisting cm-s-neo code runnable standalone-example ng-binding" data-lang="cypher" lang="cypher"><!--code class="cypher language-cypher"-->CREATE (i:Intermediary {
+  name: 'Offshore Solutions Ltd.',
+  address: '123 Offshore St, Hamilton',
+  sourceID: 'Panama Papers'
+})
+CREATE (i)-[:INTERMEDIARY_OF]->(e);<!--/code--></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Crea un nodo de tipo Intermediary que representa una firma intermediaria. Luego, establece una relación INTERMEDIARY_OF entre el intermediario y la entidad (e), indicando que esta firma facilitó la creación de la entidad offshore.</p>
 </div>
 
 
